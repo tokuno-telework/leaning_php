@@ -11,64 +11,53 @@ $list = range(0, 10, 1);
 //配列をシャッフルする
 shuffle($list);
 
-echo "ソートする配列は\n";
-var_dump($list);
-echo "======================\n";
-$result = mergeSort($list, [], 0, count($list));
-
-echo "Sorted\n";
-foreach($result as $value) {
-	echo "$value\n";
+echo "ソートする配列は[";
+foreach ($list as $key) {
+	echo $key.", ";
 }
+echo "]\n";
 
-function mergeSort($list, $tmp, $left, $right) {
+mergeSort($list, 0, count($list) - 1);
+
+echo "Sorted   [";
+foreach($list as $value) {
+	echo $value.", ";
+}
+echo "]\n";
+
+function mergeSort(&$list, $left, $right) {
 	if ($left < $right) {
-		$center = ($left + $right) / 2;
+		$center = intval(($left + $right) / 2);
+		$p = 0;
+		$j = 0;
+		$k = $left;
+		$tmp = [];
+
 		// sorted a part of front
-		mergeSort($list, $tmp, $left, $center);
+		mergeSort($list, $left, $center);
 		// sorted a part of rear
-		mergeSort($list, $tmp, $center + 1, $right);
+		mergeSort($list, $center + 1, $right);
 
-                // array merge
-		merge($list, $tmp, $left, $center + 1, $right);
-	}
-}
+		for ($i = $left; $i <= $center; $i++) {
+			$tmp[$p++] = $list[$i];
+		}
+		
+		while($i <= $right && $j < $p) {
+			if ($tmp[$j] <= $list[$i]) {
+				$list[$k] = $tmp[$j];
+				$k++;
+				$j++;
+			} else {
+				$list[$k] = $list[$i];
+				$k++;
+				$i++;
+			}
+		}
 
-function merge($list, $tmp, $left, $mid, $right) {
-	$left_end = $mid -1;
-	$tmp_pos = $left;
-	$num_elements = $right - $left + 1; // the number of factors
-
-	while($left <= $left_end && $mid <= $right) {
-		if ($list[$left] <= $list[$mid]) {
-			$tmp[$tmp_pos] = $list[$left];
-			$tmp_pos++;
-			$left++;
-		} else {
-			$tmp[$tmp_pos] = $list[$mid];
-			$tmp_pos++;
-			$mid++;
+        	// asc sort
+		while($j < $p) {
+			$list[$k++] = $tmp[$j++];
 		}
 	}
-
-	// left side
-	while ($left <= $left_end) {
-		$tmp[$tmp_pos] = $list[$left];
-		$left++;
-		$tmp_pos++;
-	}
-	// right side
-	while ($mid <= $right) {
-		$tmp[$tmp_pos] = $list[$mid];
-		$mid++;
-		$tmp_pos++;
-	}
-        // asc sort
-	for ($i = 0; $i <= $num_elements; $i++) {
-		$number[$right] = $tmp[$right];
-		$right--;
-	}
-
-	return $list;
 }	
 ?>
