@@ -5,42 +5,32 @@
 ソート済みでない物の中から最小値を探して、１個ずつ並べていく方法
 */
 
-//0～200の配列を作成。stepは1
-$list = range(0, 200 , 1);
+//0～10の配列を作成。stepは1
+$list = range(0, 10 , 1);
 //配列をシャッフルする
 shuffle($list);
 
-echo 'ソートする配列は';
-echo '<pre>';
-var_dump($list);
-echo '</pre>';
+echo "ソートする配列[";
+foreach($list as $key) {
+	echo $key.", ";
+}
+echo "]\n";
 
 $listCount = count($list);
-$isChange  = false;
 
-for($sortedCount = 0; $sortedCount < $listCount; $sortedCount++ ) {
-    //最小値のキーの変数を定義。まずは基準位置をセットする
-    $minKey = $sortedCount;
-    //最小値を探す
-    for ($index = $sortedCount +1; $index < $listCount; $index++) {
-        if ($list[$index] < $list[$sortedCount]) {
-            $minKey   = $index;
-            $isChange = true;
-        }
-        if ($isChange) {
-            //最小値が変わったら
-            $tmp                = $list[$sortedCount];
-            $list[$sortedCount] = $list[$minKey];
-            $list[$index]       = $tmp;
-            $isChange           = false;
+for($n = 0; $n < $listCount; $n++) {
+    for ($m = $n + 1; $m < $listCount; $m++) {
+        if ($list[$m] < $list[$n]) {
+            //最小値が変わったらExchange
+            $tmp      = $list[$n];
+            $list[$n] = $list[$m];
+            $list[$m] = $tmp;
         }
     }
 }
 
-echo 'ソート完了';
-echo '<pre>';
+echo "ソート完了:   [";
 foreach ($list as $value) {
-    echo $value;
-    echo '<br>';
+    echo $value.", ";
 }
-echo '</pre>';
+echo "]\n";
